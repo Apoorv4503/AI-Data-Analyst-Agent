@@ -9,6 +9,8 @@ from utils.file_handler import save_uploaded_file
 # import Query Agent
 from agents.query_agent import QueryAgent
 
+from agents.visualization_agent import VisualizationAgent
+
 
 # Page Title
 st.title("AI Data Analyst Agent")
@@ -72,9 +74,29 @@ if uploaded_file:
     st.subheader("Numeric Columns")
     st.write(agent.get_numeric_columns())
 
+    # Store numeric columns for visualization
+    numeric_columns = agent.get_numeric_columns()
+
+
     # Show Categorical Columns
     st.subheader("Categorical Columns")
     st.write(agent.get_categorical_columns())
+    # Visualization Section
+    st.subheader("Dataset Visualization")
+
+    selected_column = st.selectbox(
+        "Select Column",
+        numeric_columns
+   )
+
+    viz_agent = VisualizationAgent(df)
+
+    fig = viz_agent.create_histogram(
+        selected_column
+    )
+
+    st.plotly_chart(fig)
+
 
     # Question Input Box
     question = st.text_input(
